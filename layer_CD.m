@@ -1,4 +1,4 @@
-function [C,D] = layer_CD(k_vec,t_vec, Cij)
+function [C,D] = layer_CD(p_vec,t_vec, Cij)
 %% Calculate the composition matrix [Up,Dw]->[u,t] 
 %% and decomposition matrix [u,t]->[Up,Dw] 
 %% Input: k_vec, 6*3 matrix, wavenumber for all waves.3 for x,y,z components, 6 for 3 upgoing,
@@ -10,7 +10,7 @@ function [C,D] = layer_CD(k_vec,t_vec, Cij)
 %% Output: D matrix, the inverse of C matrix, decompisition matrix
 %%         D = inv(C)
 
-k = k_vec;
+p = p_vec;
 t = t_vec;
 %% Calculate displacement matrix U
 U = transpose(t);
@@ -19,12 +19,12 @@ U = transpose(t);
 
  % E matrix
  E = zeros(6,6);
- E(1,:) = 1i* t(:,1).*k(:,1);
- E(2,:) = 1i* t(:,2).*k(:,2);
- E(3,:) = 1i* t(:,3).*k(:,3);
- E(4,:) = 1i*(t(:,3).*k(:,2)+t(:,2).*k(:,3));
- E(5,:) = 1i*(t(:,3).*k(:,1)+t(:,1).*k(:,3));
- E(6,:) = 1i*(t(:,1).*k(:,2)+t(:,2).*k(:,1));
+ E(1,:) = 1i* t(:,1).*p(:,1);
+ E(2,:) = 1i* t(:,2).*p(:,2);
+ E(3,:) = 1i* t(:,3).*p(:,3);
+ E(4,:) = 1i*(t(:,3).*p(:,2)+t(:,2).*p(:,3));
+ E(5,:) = 1i*(t(:,3).*p(:,1)+t(:,1).*p(:,3));
+ E(6,:) = 1i*(t(:,1).*p(:,2)+t(:,2).*p(:,1));
  
  % w matrix
  w = zeros(3,6);
@@ -44,4 +44,3 @@ end
 
 
 
-end
