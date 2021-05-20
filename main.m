@@ -2,6 +2,7 @@ clear;
 close all;
 clc;
 set(0, 'DefaultLineLineWidth', 1);
+% yz 
 
 %% Set up the model
 nlayer = 3;
