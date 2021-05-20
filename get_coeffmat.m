@@ -1,5 +1,5 @@
 function [B0,B1,B2] = get_coeffmat(c, p1, p2, rho)
-%% Give the Green-Christoffel matrix rho-cijkl*kj*kl  
+%% Give the Green-Christoffel matrix rho-cijkl*pj*pl % yz   
 %% px,py are known, only pz is unknow. Divide the matrix into three parts, B2*pz^2 + B1*pz + B0
 %% Input: c->cijkl, elastic constant, p1,p2, px,py. rho density
 %% Output: B0 const for the polynomial, B1, linear coefficient, B2 quadrant coefficient 
