@@ -2,7 +2,7 @@ function C = c4toC2(c)
 %% Transfer cijkl to Cij
 %% Input: cijkl
 %% Output: Cij
-
+%% reviewed by Yingcai Zheng, May 23. 
 
 C = zeros(6,6);
 
