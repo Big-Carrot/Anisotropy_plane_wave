@@ -11,7 +11,7 @@ function [p_vec, t_vec] = christoffel(rho, Cij, px, py)
 %% First, calculate cijkl*pj*pl
 cijkl = C2toc4(Cij); % transfer Cij to cijkl
 
-[Q,P,M] = get_coeffmat(cijkl, px, py, rho); % Q coef p^0 P coef p^1 M coef p^2
+[Q,P,M] = get_coeffmat(cijkl, px, py); % Q coef p^0 P coef p^1 M coef p^2
 
 m11 = M(1,1); m12 = M(1,2); m13=M(1,3);
 m21 = M(2,1); m22 = M(2,2); m23=M(2,3);
@@ -26,6 +26,8 @@ q21 = Q(2,1); q22 = Q(2,2); q23=Q(2,3);
 q31 = Q(3,1); q32 = Q(3,2); q33=Q(3,3);
 
 pw = rho;
+
+pw_m = [pw,0,0;0,pw,0;0,0,pw];
 
 c6 = (-1).*m13.*m22.*m31+m12.*m23.*m31+m13.*m21.*m32+(-1).*m11.*m23.* ...
     m32+(-1).*m12.*m21.*m33+m11.*m22.*m33;
@@ -104,49 +106,27 @@ pz = transpose(roots (pol));
 
 pz = pz(indx_sort);
 
-t_vec = zeros(6,3);
+
+
+%% Debug interval 1
+% p_t = pz(1);
+% poly_p = [p_t^6,p_t^5,p_t^4,p_t^3,p_t^2,p_t,1];
+% res = dot(poly_p,pol)
+% GC = p_t^2*M + p_t*P + Q - pw_m;
+% %det(GC)
+% res - det(GC)
+
 p_vec = zeros(6,3);
-
-
-for i = 1:numel(pz)-1
-
-    if  pz(i)~= pz(i+1)
-        p3 = pz(i);
-        GC = p3^2*M + p3*P + Q;
-        [Q,R] = qr(GC); % take QR domposition of G-C equation
-        A = R(1:2,2:3); % see notes
-        b = -[R(1,1);0];
-        x = A\b;
-        t = [1;x];
-        t_vec(i,:) = t/norm(t);
-        p_vec(i,:) = [px,py,p3];
-    elseif pz(i) == pz(i+1) % Degenerate state
-        p3 = pz(i);
-        GC = p3^2*M + p3*P + Q;
-        [Q,R] = qr(GC);
-        t = [2;1;(-2*R(1,1)-R(1,2))/R(1,3)]; % Solve the first eigenvector
-        t_vec(i,:) = t/norm(t);
-        
-        t2 = [1;2;(-R(1,1)-2*R(1,2))/R(1,3)]; % Solve another eigenvector
-        t2 = t2 - dot(t2,t)/dot(t,t)*t; % Gram-Schmidt Orthogonalization
-        t_vec(i+1,:) = t2/norm(t2);
-    elseif pz(i) == pz(i-1)
-        continue;
-    end
+p_vec(:,1) = px;
+p_vec(:,2) = py;
+p_vec(:,3) = pz;
+t_vec = GC_solve(M,P,Q,pw_m,pz);
     
-        p3 = pz(6);
-        GC = p3^2*M + p3*P + Q;
-        [Q,R] = qr(GC); % take QR domposition of G-C equation
-        A = R(1:2,2:3); % see notes
-        b = -[R(1,1);0];
-        x = A\b;
-        t = [1;x];
-        t_vec(6,:) = t/norm(t);
-        p_vec(6,:) = [px,py,p3];
+    
     
 end
 
-end
+
 
 
 
