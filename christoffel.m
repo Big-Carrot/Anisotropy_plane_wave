@@ -119,8 +119,8 @@ pz = pz(indx_sort);
 p_vec = zeros(6,3);
 p_vec(:,1) = px;
 p_vec(:,2) = py;
-p_vec(:,3) = pz;
-t_vec = GC_solve(M,P,Q,pw_m,pz);
+p_vec(:,3) = real(pz);
+t_vec = GC_solveQr(M,P,Q,pw_m,pz);
     
     
     
